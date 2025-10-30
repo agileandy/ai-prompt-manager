@@ -116,6 +116,10 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             {versions.length > 0 && (
               <span>{versions.length + 1} version{versions.length > 0 ? 's' : ''}</span>
             )}
+            <span className="flex items-center gap-1 text-accent font-medium">
+              <Copy size={12} weight="fill" />
+              {prompt.usageCount}
+            </span>
           </div>
           <Button
             variant="outline"
