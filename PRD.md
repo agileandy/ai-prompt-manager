@@ -15,11 +15,11 @@ A sophisticated browser-based AI prompt management system with hierarchical tagg
 ## Essential Features
 
 ### Prompt Management
-- **Functionality**: Create, read, update, delete prompts with title, description, content, and tags
-- **Purpose**: Central hub for organizing AI prompts with searchable metadata
-- **Trigger**: Click "New Prompt" button or select existing prompt from list
-- **Progression**: Click new → Modal opens → Fill form → Add tags → Save → Prompt appears in list
-- **Success criteria**: Prompts persist across sessions, searchable by title/content, display in organized grid
+- **Functionality**: Create, read, update, delete prompts with title, description, content, and tags. Usage tracking via copy counter.
+- **Purpose**: Central hub for organizing AI prompts with searchable metadata and usage analytics
+- **Trigger**: Click "New Prompt" button, select existing prompt from list, or click card to view details
+- **Progression**: Click new → Modal opens → Fill form → Add tags → Save → Prompt appears in list. Click card → View details with tabs → Access version history
+- **Success criteria**: Prompts persist across sessions, searchable by title/content, display in organized grid, usage counter increments on copy, version number visible on card
 
 ### Hierarchical Tag System
 - **Functionality**: Nested tag structure using `/` separator (e.g., `coding/javascript/react`)
@@ -29,11 +29,11 @@ A sophisticated browser-based AI prompt management system with hierarchical tagg
 - **Success criteria**: Tags display hierarchically with accurate counts, cascading updates work, orphan cleanup functions
 
 ### Version Control
-- **Functionality**: Automatic versioning on every prompt edit with history viewer
-- **Purpose**: Never lose previous iterations, compare changes, restore old versions
-- **Trigger**: Click version history icon on prompt card
-- **Progression**: Select prompt → Click history → View timeline → Select version → Preview content → Restore if desired
-- **Success criteria**: Each edit creates timestamped version, history displays chronologically, restore works correctly
+- **Functionality**: Automatic versioning on every prompt edit with history viewer and copy functionality
+- **Purpose**: Never lose previous iterations, track changes over time, access any version
+- **Trigger**: Click on any prompt card to view details and version history
+- **Progression**: Click card → View modal with tabs → Switch to "Version History" tab → Browse versions → Copy any version content
+- **Success criteria**: Each edit creates numbered version with full snapshot (title, description, content), versions display chronologically, copy to clipboard works, version number shown on card front
 
 ### AI Integration
 - **Functionality**: Generate prompts from descriptions and optimize existing prompts

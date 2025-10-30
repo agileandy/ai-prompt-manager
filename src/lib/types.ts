@@ -21,7 +21,10 @@ export interface Version {
   id: string
   promptId: string
   content: string
+  title: string
+  description: string
   timestamp: number
+  versionNumber: number
 }
 
 export interface AIConfig {

@@ -58,14 +58,20 @@ function App() {
       if (!currentPrompts) return [prompt]
       const existing = currentPrompts.find(p => p.id === prompt.id)
       
-      if (existing && existing.content !== prompt.content) {
+      if (existing && (existing.content !== prompt.content || existing.title !== prompt.title || existing.description !== prompt.description)) {
+        const existingVersions = (versions || []).filter(v => v.promptId === prompt.id)
+        const nextVersionNumber = existingVersions.length + 1
+        
         setVersions(currentVersions => [
           ...(currentVersions || []),
           {
             id: crypto.randomUUID(),
             promptId: prompt.id,
             content: existing.content,
-            timestamp: Date.now()
+            title: existing.title,
+            description: existing.description,
+            timestamp: existing.modifiedAt,
+            versionNumber: nextVersionNumber
           }
         ])
       }
