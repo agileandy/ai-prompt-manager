@@ -80,7 +80,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
     <>
       <Card 
         className={cn(
-          "group transition-all relative bg-card border-border/50",
+          "group transition-all relative bg-card border-border/50 flex flex-col h-full",
           isDragOver && "border-accent ring-2 ring-accent/50 bg-accent/5"
         )}
         onDragOver={handleDragOver}
@@ -125,8 +125,8 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           )}
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2 text-xs text-muted-foreground">
+        <CardContent className="flex flex-col flex-1">
+          <div className="space-y-2 text-xs text-muted-foreground flex-1">
             <div className="flex items-center gap-2">
               <span className="font-medium text-foreground/70">Used:</span>
               <span>{prompt.usageCount} times</span>
@@ -141,7 +141,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           </div>
           
-          <div className="flex items-center justify-end gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-end gap-2 pt-4 mt-auto border-t border-border/50" onClick={(e) => e.stopPropagation()}>
             <Button
               variant="ghost"
               size="icon"
