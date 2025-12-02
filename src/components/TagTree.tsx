@@ -34,8 +34,19 @@ interface TagTreeNodeProps {
 
 function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
   const [expanded, setExpanded] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
   const hasChildren = node.children.size > 0
   const isSelected = selectedTags.includes(node.fullPath)
+
+  const handleDragStart = (e: React.DragEvent) => {
+    e.dataTransfer.setData('tagPath', node.fullPath)
+    e.dataTransfer.effectAllowed = 'copy'
+    setIsDragging(true)
+  }
+
+  const handleDragEnd = () => {
+    setIsDragging(false)
+  }
 
   return (
     <div>
@@ -61,10 +72,14 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
           variant="ghost"
           size="sm"
           className={cn(
-            'flex-1 justify-between h-7 px-2 text-xs',
-            isSelected && 'bg-accent/20 text-accent-foreground'
+            'flex-1 justify-between h-7 px-2 text-xs cursor-grab active:cursor-grabbing',
+            isSelected && 'bg-accent/20 text-accent-foreground',
+            isDragging && 'opacity-50'
           )}
           onClick={() => onTagClick(node.fullPath)}
+          draggable
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
         >
           <span className="truncate">{node.name}</span>
           <Badge variant="secondary" className="ml-2 h-5 px-1.5 text-xs">

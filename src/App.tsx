@@ -136,6 +136,33 @@ function App() {
     setShowEditor(true)
   }
 
+  const handleTagAssigned = (promptId: string, tagPath: string) => {
+    setPrompts(currentPrompts => {
+      if (!currentPrompts) return []
+      return currentPrompts.map(p => {
+        if (p.id === promptId && !p.tags.includes(tagPath)) {
+          toast.success(`Tag "${tagPath.split('/').pop()}" added to "${p.title}"`)
+          return { ...p, tags: [...p.tags, tagPath], modifiedAt: Date.now() }
+        }
+        return p
+      })
+    })
+
+    const existingTag = (tags || []).find(t => t.name === tagPath)
+    if (!existingTag) {
+      setTags(currentTags => [
+        ...(currentTags || []),
+        {
+          id: crypto.randomUUID(),
+          name: tagPath,
+          color: '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'),
+          description: '',
+          promptCount: 0
+        }
+      ])
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border bg-card">
@@ -176,7 +203,8 @@ function App() {
       <div className="flex flex-1 overflow-hidden">
         <aside className="w-64 border-r border-border bg-card p-4 overflow-y-auto">
           <div className="mb-4">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Tags</h2>
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">Tags</h2>
+            <p className="text-xs text-muted-foreground mb-3">Drag tags onto prompts to assign them</p>
             {selectedTags.length > 0 && (
               <Button
                 variant="ghost"
@@ -255,6 +283,7 @@ function App() {
                         )
                       )
                     }}
+                    onTagAssigned={handleTagAssigned}
                   />
                 ))}
               </div>

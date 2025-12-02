@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Pencil, Trash, Clock, Copy, Eye } from '@phosphor-icons/react'
 import { toast } from 'sonner'
 import { formatDistanceToNow, format } from 'date-fns'
+import { cn } from '@/lib/utils'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,15 +35,37 @@ interface PromptCardProps {
   onEdit: (prompt: Prompt) => void
   onDelete: (id: string) => void
   onUsePrompt: (id: string) => void
+  onTagAssigned?: (promptId: string, tagPath: string) => void
 }
 
-export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUsePrompt }: PromptCardProps) {
+export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUsePrompt, onTagAssigned }: PromptCardProps) {
   const [showDetails, setShowDetails] = useState(false)
+  const [isDragOver, setIsDragOver] = useState(false)
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content)
     onUsePrompt(prompt.id)
     toast.success('Copied to clipboard')
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'copy'
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = () => {
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
+    
+    const tagPath = e.dataTransfer.getData('tagPath')
+    if (tagPath && onTagAssigned && !prompt.tags.includes(tagPath)) {
+      onTagAssigned(prompt.id, tagPath)
+    }
   }
 
   const getTagColor = (tagPath: string) => {
@@ -55,7 +78,23 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
 
   return (
     <>
-      <Card className="group hover:border-accent transition-colors cursor-pointer" onClick={() => setShowDetails(true)}>
+      <Card 
+        className={cn(
+          "group hover:border-accent transition-colors cursor-pointer relative",
+          isDragOver && "border-accent ring-2 ring-accent/50 bg-accent/5"
+        )}
+        onClick={() => setShowDetails(true)}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {isDragOver && (
+          <div className="absolute inset-0 bg-accent/10 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg border-2 border-accent border-dashed pointer-events-none">
+            <div className="bg-accent text-accent-foreground px-4 py-2 rounded-md font-medium text-sm">
+              Drop to add tag
+            </div>
+          </div>
+        )}
         <CardHeader>
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
