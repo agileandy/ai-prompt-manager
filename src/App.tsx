@@ -3,7 +3,7 @@ import { useKV } from '@github/spark/hooks'
 import { Prompt, Tag, Version, AIConfig, DEFAULT_AI_CONFIG } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, Plus, Gear, Tag as TagIcon, Sparkle } from '@phosphor-icons/react'
+import { MagnifyingGlass, Plus, Gear, Tag as TagIcon, Sparkle, ArrowsLeftRight } from '@phosphor-icons/react'
 import { Toaster, toast } from 'sonner'
 import { PromptCard } from '@/components/PromptCard'
 import { TagTree } from '@/components/TagTree'
@@ -11,6 +11,7 @@ import { PromptEditor } from '@/components/PromptEditor'
 import { AIGenerator } from '@/components/AIGenerator'
 import { SettingsDialog } from '@/components/SettingsDialog'
 import { TagManager } from '@/components/TagManager'
+import { ImportExport } from '@/components/ImportExport'
 import { buildTagTree } from '@/lib/tag-utils'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   const [showAIGenerator, setShowAIGenerator] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showTagManager, setShowTagManager] = useState(false)
+  const [showImportExport, setShowImportExport] = useState(false)
 
   const tagTree = useMemo(() => buildTagTree(tags || [], prompts || []), [tags, prompts])
 
@@ -143,6 +145,14 @@ function App() {
             <h1 className="text-2xl font-bold tracking-tight">AI Prompt Manager</h1>
           </div>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowImportExport(true)}
+            >
+              <ArrowsLeftRight size={16} />
+              Import/Export
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -283,6 +293,17 @@ function App() {
         prompts={prompts || []}
         onTagsChange={setTags}
         onPromptsChange={setPrompts}
+      />
+
+      <ImportExport
+        open={showImportExport}
+        onClose={() => setShowImportExport(false)}
+        prompts={prompts || []}
+        versions={versions || []}
+        onImport={(newPrompts, newVersions) => {
+          setPrompts(currentPrompts => [...(currentPrompts || []), ...newPrompts])
+          setVersions(currentVersions => [...(currentVersions || []), ...newVersions])
+        }}
       />
 
       <Toaster position="bottom-right" />
