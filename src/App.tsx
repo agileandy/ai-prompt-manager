@@ -165,38 +165,40 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b border-border bg-card/60 backdrop-blur-xl sticky top-0 z-50">
-        <div className="flex items-center justify-between px-8 py-4">
+      <header className="border-b border-border/50 bg-card/40 backdrop-blur-xl sticky top-0 z-50">
+        <div className="flex items-center justify-between px-8 py-5">
           <div className="flex items-center gap-3">
-            <Sparkle size={28} weight="duotone" className="text-accent" />
+            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+              <Sparkle size={20} weight="duotone" className="text-white" />
+            </div>
             <h1 className="text-xl font-bold tracking-tight text-foreground">AI Prompt Manager</h1>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowImportExport(true)}
-              className="hover:bg-muted"
+              className="hover:bg-muted/70 text-muted-foreground hover:text-foreground"
             >
-              <ArrowsLeftRight size={16} weight="duotone" />
+              <ArrowsLeftRight size={18} weight="duotone" />
               Import/Export
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowTagManager(true)}
-              className="hover:bg-muted"
+              className="hover:bg-muted/70 text-muted-foreground hover:text-foreground"
             >
-              <TagIcon size={16} weight="duotone" />
+              <TagIcon size={18} weight="duotone" />
               Manage Tags
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setShowSettings(true)}
-              className="hover:bg-muted"
+              className="hover:bg-muted/70 text-muted-foreground hover:text-foreground"
             >
-              <Gear size={16} weight="duotone" />
+              <Gear size={18} weight="duotone" />
               Settings
             </Button>
           </div>
@@ -204,15 +206,29 @@ function App() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 border-r border-border bg-card/40 p-6 overflow-y-auto">
+        <aside className="w-72 border-r border-border/50 bg-background p-6 overflow-y-auto">
+          <div className="mb-8 space-y-4">
+            <div>
+              <h2 className="text-base font-bold text-foreground mb-1">AI Prompts</h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">Organize with tags</p>
+            </div>
+            <div className="space-y-2 text-sm">
+              <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted/50 transition-colors text-foreground font-medium">
+                All Prompts
+              </button>
+              <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-muted/50 transition-colors text-muted-foreground">
+                Untagged
+              </button>
+            </div>
+          </div>
+          
           <div className="mb-6 space-y-3">
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Tags</h2>
-            <p className="text-xs text-muted-foreground leading-relaxed">Drag tags onto prompts to organize your library</p>
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">TAGS</h3>
             {selectedTags.length > 0 && (
               <Button
                 variant="outline"
                 size="sm"
-                className="w-full"
+                className="w-full border-border/50 hover:bg-muted/50"
                 onClick={() => setSelectedTags([])}
               >
                 Clear {selectedTags.length} Filter{selectedTags.length > 1 ? 's' : ''}
@@ -226,35 +242,35 @@ function App() {
           />
         </aside>
 
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-background">
           <div className="max-w-[1800px] mx-auto p-8">
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-4 mb-8">
               <div className="relative flex-1 max-w-md">
                 <MagnifyingGlass
                   size={18}
                   weight="duotone"
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
                   placeholder="Search prompts..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-card border-border"
+                  className="pl-11 h-11 bg-card border-border/50 rounded-xl"
                 />
               </div>
               <Button 
                 onClick={() => setShowAIGenerator(true)} 
                 variant="outline"
-                className="h-10"
+                className="h-11 px-5 border-border/50 hover:bg-muted/50 rounded-xl"
               >
-                <Sparkle size={16} weight="duotone" />
+                <Sparkle size={18} weight="duotone" />
                 Generate with AI
               </Button>
               <Button 
                 onClick={handleCreatePrompt}
-                className="h-10 bg-primary hover:bg-primary/90"
+                className="h-11 px-5 bg-primary hover:bg-primary/90 rounded-xl"
               >
-                <Plus size={16} weight="bold" />
+                <Plus size={18} weight="bold" />
                 New Prompt
               </Button>
             </div>
@@ -273,7 +289,7 @@ function App() {
                 {(prompts || []).length === 0 && (
                   <Button 
                     onClick={handleCreatePrompt}
-                    className="bg-primary hover:bg-primary/90"
+                    className="bg-primary hover:bg-primary/90 h-11 px-6 rounded-xl"
                   >
                     <Plus size={18} weight="bold" />
                     Create First Prompt
@@ -281,7 +297,7 @@ function App() {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
                 {filteredPrompts.map(prompt => (
                   <PromptCard
                     key={prompt.id}

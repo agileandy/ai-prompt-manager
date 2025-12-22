@@ -80,8 +80,8 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
     <>
       <Card 
         className={cn(
-          "group relative bg-card border-border hover:border-primary/40 flex flex-col h-full transition-all duration-200 hover:shadow-lg hover:shadow-primary/5",
-          isDragOver && "border-accent ring-2 ring-accent/30 bg-accent/5"
+          "group relative bg-card border-border hover:border-primary/50 flex flex-col h-full transition-all duration-200",
+          isDragOver && "border-accent ring-2 ring-accent/40 bg-accent/5"
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -95,33 +95,33 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
           </div>
         )}
         
-        <CardHeader className="space-y-4 pb-5">
+        <CardHeader className="space-y-4 pb-5 pt-6 px-6">
           <div className="flex items-start justify-between gap-4">
-            <CardTitle className="text-base font-semibold flex-1 min-w-0 line-clamp-2 leading-snug text-foreground">
+            <CardTitle className="text-lg font-semibold flex-1 min-w-0 line-clamp-2 leading-tight text-foreground">
               {prompt.title}
             </CardTitle>
             <Badge 
               variant="secondary" 
-              className="text-xs shrink-0 bg-muted text-muted-foreground font-medium px-2 py-0.5"
+              className="text-xs shrink-0 bg-primary/15 text-primary border border-primary/30 font-semibold px-2.5 py-1"
             >
               v{currentVersion}
             </Badge>
           </div>
           
-          <CardDescription className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <CardDescription className="text-sm text-muted-foreground/90 line-clamp-2 leading-relaxed">
             {prompt.description || 'No description provided'}
           </CardDescription>
           
           {prompt.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {prompt.tags.map(tag => (
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className="text-xs px-2 py-0.5 font-medium"
+                  className="text-xs px-2.5 py-1 font-medium border"
                   style={{
-                    backgroundColor: getTagColor(tag) + '15',
-                    borderColor: getTagColor(tag) + '30',
+                    backgroundColor: getTagColor(tag) + '18',
+                    borderColor: getTagColor(tag) + '40',
                     color: getTagColor(tag)
                   }}
                 >
@@ -132,71 +132,87 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
           )}
         </CardHeader>
         
-        <CardContent className="flex flex-col flex-1 pt-0 space-y-5">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-muted/50 rounded-md p-3 space-y-1">
-              <div className="text-muted-foreground text-[10px] uppercase tracking-wider font-medium">Usage</div>
-              <div className="text-foreground font-bold text-xl">{prompt.usageCount}</div>
+        <CardContent className="flex flex-col flex-1 pt-0 pb-5 px-6 space-y-5">
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground/80">
+              <span className="font-medium">Used:</span>
+              <span className="font-semibold text-foreground">{prompt.usageCount} times</span>
             </div>
-            <div className="bg-muted/50 rounded-md p-3 space-y-1">
-              <div className="text-muted-foreground text-[10px] uppercase tracking-wider font-medium">Modified</div>
-              <div className="text-foreground font-medium text-xs">
-                {formatDistanceToNow(prompt.modifiedAt, { addSuffix: true })}
-              </div>
+            <div className="flex items-center gap-2 text-muted-foreground/80">
+              <span className="font-medium">Last Used:</span>
+              <span className="text-foreground/90">{prompt.usageCount > 0 ? formatDistanceToNow(prompt.modifiedAt, { addSuffix: true }) : 'Never'}</span>
+            </div>
+            <div className="flex items-center gap-2 text-muted-foreground/80">
+              <span className="font-medium">Created:</span>
+              <span className="text-foreground/90">{format(prompt.createdAt, 'M/d/yyyy')}</span>
             </div>
           </div>
           
           <div className="flex-1"></div>
           
-          <div className="space-y-3 pt-3 border-t border-border">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between pt-4 border-t border-border/60">
+            <div className="flex items-center gap-1.5">
               <Button
                 variant="ghost"
-                size="sm"
-                className="flex-1 h-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                size="icon"
+                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/70"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCopy(prompt.content)
                 }}
+                title="Copy content"
               >
-                <Copy size={16} weight="duotone" />
-                Copy
+                <Copy size={18} weight="duotone" />
               </Button>
               <Button
                 variant="ghost"
-                size="sm"
-                className="flex-1 h-9 text-muted-foreground hover:text-accent hover:bg-accent/10"
+                size="icon"
+                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/70"
                 onClick={(e) => {
                   e.stopPropagation()
                   setShowDetails(true)
                 }}
+                title="View details"
               >
-                <ClockCounterClockwise size={16} weight="duotone" />
-                History
+                <Eye size={18} weight="duotone" />
               </Button>
-            </div>
-            
-            <div className="flex items-center justify-end gap-2">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
+                className="h-9 w-9 text-muted-foreground hover:text-accent hover:bg-accent/10"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowDetails(true)
+                }}
+                title="Version history"
+              >
+                <ClockCounterClockwise size={18} weight="duotone" />
+              </Button>
+            </div>
+            
+            <div className="flex items-center gap-1.5">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
                 onClick={(e) => {
                   e.stopPropagation()
                   onEdit(prompt)
                 }}
+                title="Edit prompt"
               >
-                <Pencil size={16} weight="duotone" />
+                <Pencil size={18} weight="duotone" />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     onClick={(e) => e.stopPropagation()}
+                    title="Delete prompt"
                   >
-                    <Trash size={16} weight="duotone" />
+                    <Trash size={18} weight="duotone" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-card border-border">
