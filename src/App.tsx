@@ -165,35 +165,41 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b border-border bg-card">
-        <div className="flex items-center justify-between px-6 py-4">
+      <header className="border-b border-border/40 bg-card/50 backdrop-blur-xl sticky top-0 z-50">
+        <div className="flex items-center justify-between px-6 py-5">
           <div className="flex items-center gap-3">
-            <Sparkle size={28} weight="fill" className="text-accent" />
-            <h1 className="text-2xl font-bold tracking-tight">AI Prompt Manager</h1>
+            <div className="relative">
+              <div className="absolute inset-0 bg-accent/30 blur-xl rounded-full"></div>
+              <Sparkle size={32} weight="duotone" className="text-accent relative" />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">AI Prompt Manager</h1>
           </div>
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setShowImportExport(true)}
+              className="hover:bg-muted/50 transition-all"
             >
-              <ArrowsLeftRight size={16} />
+              <ArrowsLeftRight size={18} weight="duotone" />
               Import/Export
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setShowTagManager(true)}
+              className="hover:bg-muted/50 transition-all"
             >
-              <TagIcon size={16} />
+              <TagIcon size={18} weight="duotone" />
               Manage Tags
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => setShowSettings(true)}
+              className="hover:bg-muted/50 transition-all"
             >
-              <Gear size={16} />
+              <Gear size={18} weight="duotone" />
               Settings
             </Button>
           </div>
@@ -201,18 +207,21 @@ function App() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        <aside className="w-64 border-r border-border bg-card p-4 overflow-y-auto">
-          <div className="mb-4">
-            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-1">Tags</h2>
-            <p className="text-xs text-muted-foreground mb-3">Drag tags onto prompts to assign them</p>
+        <aside className="w-72 border-r border-border/40 bg-card/30 backdrop-blur-sm p-5 overflow-y-auto">
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-1 w-8 bg-gradient-to-r from-accent to-primary rounded-full"></div>
+              <h2 className="text-sm font-bold text-foreground uppercase tracking-wider">Tags</h2>
+            </div>
+            <p className="text-xs text-muted-foreground/80 mb-4 leading-relaxed">Drag tags onto prompts to organize your library</p>
             {selectedTags.length > 0 && (
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className="w-full mb-2"
+                className="w-full mb-3 border-accent/30 hover:bg-accent/10 hover:border-accent/50 transition-all"
                 onClick={() => setSelectedTags([])}
               >
-                Clear Filters
+                Clear {selectedTags.length} Filter{selectedTags.length > 1 ? 's' : ''}
               </Button>
             )}
           </div>
@@ -223,51 +232,66 @@ function App() {
           />
         </aside>
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="relative flex-1">
+        <main className="flex-1 overflow-y-auto">
+          <div className="max-w-[1600px] mx-auto p-8">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="relative flex-1 max-w-xl">
                 <MagnifyingGlass
                   size={20}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                  weight="duotone"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/60"
                 />
                 <Input
-                  placeholder="Search prompts..."
+                  placeholder="Search by title or content..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-11 h-11 bg-card/50 border-border/40 focus:border-accent/50 focus:ring-accent/20 transition-all"
                 />
               </div>
-              <Button onClick={() => setShowAIGenerator(true)} variant="outline">
-                <Sparkle size={16} />
+              <Button 
+                onClick={() => setShowAIGenerator(true)} 
+                variant="outline"
+                className="h-11 border-accent/30 hover:bg-accent/10 hover:border-accent/50 transition-all"
+              >
+                <Sparkle size={18} weight="duotone" />
                 Generate with AI
               </Button>
-              <Button onClick={handleCreatePrompt}>
-                <Plus size={16} />
+              <Button 
+                onClick={handleCreatePrompt}
+                className="h-11 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-lg shadow-primary/25"
+              >
+                <Plus size={18} weight="bold" />
                 New Prompt
               </Button>
             </div>
 
             {filteredPrompts.length === 0 ? (
-              <div className="text-center py-16">
-                <Sparkle size={64} className="text-muted-foreground mx-auto mb-4 opacity-50" />
-                <h3 className="text-xl font-semibold mb-2">
+              <div className="text-center py-24">
+                <div className="relative w-24 h-24 mx-auto mb-6">
+                  <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-full"></div>
+                  <Sparkle size={96} weight="duotone" className="text-muted-foreground/30 relative" />
+                </div>
+                <h3 className="text-2xl font-bold mb-3 bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent">
                   {(prompts || []).length === 0 ? 'No prompts yet' : 'No matching prompts'}
                 </h3>
-                <p className="text-muted-foreground mb-6">
+                <p className="text-muted-foreground/80 mb-8 text-lg max-w-md mx-auto leading-relaxed">
                   {(prompts || []).length === 0
-                    ? 'Create your first prompt to get started'
+                    ? 'Create your first prompt to build your AI library'
                     : 'Try adjusting your search or filters'}
                 </p>
                 {(prompts || []).length === 0 && (
-                  <Button onClick={handleCreatePrompt}>
-                    <Plus size={16} />
+                  <Button 
+                    onClick={handleCreatePrompt}
+                    size="lg"
+                    className="bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all shadow-xl shadow-primary/30"
+                  >
+                    <Plus size={20} weight="bold" />
                     Create First Prompt
                   </Button>
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
                 {filteredPrompts.map(prompt => (
                   <PromptCard
                     key={prompt.id}

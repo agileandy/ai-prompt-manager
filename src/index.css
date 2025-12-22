@@ -1,39 +1,75 @@
 @layer base {
   :root {
-    --background: oklch(0.96 0.005 270);
-    --foreground: oklch(0.12 0.02 270);
+    --background: oklch(0.12 0.015 265);
+    --foreground: oklch(0.95 0.01 265);
 
-    --card: oklch(0.98 0.003 270);
-    --card-foreground: oklch(0.12 0.02 270);
-    --popover: oklch(1.00 0 0);
-    --popover-foreground: oklch(0.12 0.02 270);
+    --card: oklch(0.18 0.02 265);
+    --card-foreground: oklch(0.95 0.01 265);
+    --popover: oklch(0.16 0.02 265);
+    --popover-foreground: oklch(0.95 0.01 265);
 
-    --primary: oklch(0.60 0.25 320);
-    --primary-foreground: oklch(0.98 0.003 270);
-    --secondary: oklch(0.88 0.08 280);
-    --secondary-foreground: oklch(0.20 0.03 270);
-    --accent: oklch(0.70 0.22 180);
-    --accent-foreground: oklch(0.12 0.02 270);
-    --destructive: oklch(0.65 0.25 15);
-    --destructive-foreground: oklch(0.98 0.003 270);
+    --primary: oklch(0.65 0.24 285);
+    --primary-foreground: oklch(0.98 0.005 265);
+    --secondary: oklch(0.25 0.025 265);
+    --secondary-foreground: oklch(0.85 0.01 265);
+    --accent: oklch(0.72 0.18 195);
+    --accent-foreground: oklch(0.15 0.02 265);
+    --destructive: oklch(0.62 0.24 25);
+    --destructive-foreground: oklch(0.98 0.005 265);
 
-    --muted: oklch(0.92 0.01 270);
-    --muted-foreground: oklch(0.40 0.02 270);
-    --border: oklch(0.85 0.02 270);
-    --input: oklch(0.85 0.02 270);
-    --ring: oklch(0.60 0.25 320);
+    --muted: oklch(0.22 0.02 265);
+    --muted-foreground: oklch(0.55 0.01 265);
+    --border: oklch(0.28 0.025 265);
+    --input: oklch(0.25 0.025 265);
+    --ring: oklch(0.65 0.24 285);
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    --shadow-color: oklch(0.60 0.25 320);
-    --shadow-opacity: 0.25;
-    --shadow-blur: 12px;
-    --shadow-spread: 0px;
-    --shadow-offset-x: 2px;
-    --shadow-offset-y: 6px;
+    --shadow-color: oklch(0.08 0.02 265);
+    --shadow-opacity: 0.5;
+    --shadow-blur: 24px;
+    --shadow-spread: -4px;
+    --shadow-offset-x: 0px;
+    --shadow-offset-y: 8px;
   }
 
   body {
-    font-family: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    background: 
+      radial-gradient(circle at 20% 80%, oklch(0.20 0.08 285 / 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, oklch(0.20 0.08 195 / 0.2) 0%, transparent 50%),
+      var(--background);
+    background-attachment: fixed;
+  }
+
+  * {
+    @apply antialiased;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s infinite linear;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      oklch(0.95 0.01 265 / 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 1000px 100%;
   }
 }
