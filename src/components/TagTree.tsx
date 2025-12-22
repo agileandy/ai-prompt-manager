@@ -50,20 +50,20 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
 
   return (
     <div>
-      <div className="flex items-center gap-1.5 group">
+      <div className="flex items-center gap-1 group">
         {hasChildren && (
           <Button
             variant="ghost"
             size="icon"
-            className="h-6 w-6 p-0 hover:bg-muted/50 transition-all"
+            className="h-6 w-6 p-0 hover:bg-muted"
             onClick={() => setExpanded(!expanded)}
           >
             <CaretRight
-              size={16}
+              size={14}
               weight="bold"
               className={cn(
-                'transition-all duration-200 text-muted-foreground group-hover:text-foreground',
-                expanded && 'rotate-90 text-accent'
+                'transition-transform text-muted-foreground',
+                expanded && 'rotate-90'
               )}
             />
           </Button>
@@ -73,10 +73,10 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
           variant="ghost"
           size="sm"
           className={cn(
-            'flex-1 justify-between h-9 px-3 text-sm cursor-grab active:cursor-grabbing transition-all duration-200 font-medium',
-            isSelected && 'bg-accent/20 text-accent border-l-2 border-accent shadow-sm',
-            !isSelected && 'hover:bg-muted/50 hover:text-foreground',
-            isDragging && 'opacity-40 scale-95'
+            'flex-1 justify-between h-8 px-2 text-sm cursor-grab active:cursor-grabbing font-medium',
+            isSelected && 'bg-accent/10 text-accent',
+            !isSelected && 'hover:bg-muted hover:text-foreground',
+            isDragging && 'opacity-40'
           )}
           onClick={() => onTagClick(node.fullPath)}
           draggable
@@ -87,8 +87,8 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
           <Badge 
             variant="secondary" 
             className={cn(
-              "ml-2 h-6 px-2 text-xs font-semibold transition-all",
-              isSelected && "bg-accent/30 text-accent border-accent/40"
+              "ml-2 h-5 px-1.5 text-xs font-semibold",
+              isSelected && "bg-accent/20 text-accent"
             )}
           >
             {node.count}
@@ -96,8 +96,7 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
         </Button>
       </div>
       {hasChildren && expanded && (
-        <div className="ml-6 mt-1.5 space-y-1.5 border-l-2 border-border/30 pl-3 relative">
-          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-accent/40 to-transparent"></div>
+        <div className="ml-5 mt-1 space-y-1 border-l border-border pl-2">
           {sortTagNodes(node.children).map(child => (
             <TagTreeNode
               key={child.fullPath}
