@@ -49,12 +49,12 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
 
   return (
     <div>
-      <div className="flex items-center gap-1 group">
+      <div className="flex items-center gap-0.5">
         {hasChildren && (
           <Button
             variant="ghost"
             size="icon"
-            className="h-5 w-5 p-0 hover:bg-transparent text-muted-foreground hover:text-foreground"
+            className="h-6 w-6 p-0 hover:bg-transparent text-muted-foreground hover:text-foreground"
             onClick={() => setExpanded(!expanded)}
           >
             <CaretRight
@@ -67,14 +67,14 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
             />
           </Button>
         )}
-        {!hasChildren && <div className="w-5" />}
+        {!hasChildren && <div className="w-6" />}
         <Button
           variant="ghost"
           size="sm"
           className={cn(
-            'flex-1 justify-between h-8 px-2.5 text-sm cursor-grab active:cursor-grabbing font-medium rounded-lg',
-            isSelected && 'bg-primary/15 text-primary border border-primary/30',
-            !isSelected && 'hover:bg-muted/50 hover:text-foreground text-muted-foreground',
+            'flex-1 justify-between h-7 px-2 text-xs cursor-grab active:cursor-grabbing font-medium',
+            isSelected && 'bg-primary/15 text-primary',
+            !isSelected && 'hover:bg-muted/50 text-muted-foreground hover:text-foreground',
             isDragging && 'opacity-40'
           )}
           onClick={() => onTagClick(node.fullPath)}
@@ -83,18 +83,13 @@ function TagTreeNode({ node, selectedTags, onTagClick }: TagTreeNodeProps) {
           onDragEnd={handleDragEnd}
         >
           <span className="truncate">{node.name}</span>
-          <span 
-            className={cn(
-              "ml-2 text-xs font-semibold",
-              isSelected ? "text-primary/80" : "text-muted-foreground/70"
-            )}
-          >
-            ({node.count})
+          <span className={cn("ml-1.5 text-xs", isSelected ? "text-primary/80" : "text-muted-foreground/60")}>
+            {node.count}
           </span>
         </Button>
       </div>
       {hasChildren && expanded && (
-        <div className="ml-3 mt-1 space-y-1 border-l-2 border-border/40 pl-2">
+        <div className="ml-3 mt-0.5 space-y-0.5 border-l border-border/40 pl-1.5">
           {sortTagNodes(node.children).map(child => (
             <TagTreeNode
               key={child.fullPath}

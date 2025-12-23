@@ -80,48 +80,51 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
     <>
       <Card 
         className={cn(
-          "group relative bg-card border-border hover:border-primary/50 flex flex-col h-full transition-all duration-200",
-          isDragOver && "border-accent ring-2 ring-accent/40 bg-accent/5"
+          "relative bg-card border border-border hover:border-primary/40 transition-all duration-150 flex flex-col",
+          isDragOver && "border-accent ring-1 ring-accent/30 bg-accent/5"
         )}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {isDragOver && (
-          <div className="absolute inset-0 bg-accent/10 backdrop-blur-sm z-10 flex items-center justify-center rounded-lg border-2 border-accent border-dashed pointer-events-none">
-            <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-semibold text-sm">
+          <div className="absolute inset-0 bg-accent/10 z-10 flex items-center justify-center rounded-lg border-2 border-accent border-dashed pointer-events-none">
+            <div className="bg-accent text-accent-foreground px-3 py-1.5 rounded font-medium text-sm">
               Drop to add tag
             </div>
           </div>
         )}
         
-        <CardHeader className="space-y-4 pb-5 pt-6 px-6">
-          <div className="flex items-start justify-between gap-4">
-            <CardTitle className="text-lg font-semibold flex-1 min-w-0 line-clamp-2 leading-tight text-foreground">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <CardTitle className="text-base font-semibold flex-1 line-clamp-2 leading-snug">
               {prompt.title}
             </CardTitle>
             <Badge 
               variant="secondary" 
-              className="text-xs shrink-0 bg-primary/15 text-primary border border-primary/30 font-semibold px-2.5 py-1"
+              className="text-xs shrink-0 bg-primary/10 text-primary border-0 font-medium px-2 py-0.5"
             >
               v{currentVersion}
             </Badge>
           </div>
           
-          <CardDescription className="text-sm text-muted-foreground/90 line-clamp-2 leading-relaxed">
-            {prompt.description || 'No description provided'}
-          </CardDescription>
-          
+          {prompt.description && (
+            <CardDescription className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+              {prompt.description}
+            </CardDescription>
+          )}
+        </CardHeader>
+        
+        <CardContent className="flex flex-col flex-1 pt-0 space-y-4">
           {prompt.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {prompt.tags.map(tag => (
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className="text-xs px-2.5 py-1 font-medium border"
+                  className="text-xs px-2 py-0.5 font-normal border-0"
                   style={{
-                    backgroundColor: getTagColor(tag) + '18',
-                    borderColor: getTagColor(tag) + '40',
+                    backgroundColor: getTagColor(tag) + '20',
                     color: getTagColor(tag)
                   }}
                 >
@@ -130,89 +133,78 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
               ))}
             </div>
           )}
-        </CardHeader>
-        
-        <CardContent className="flex flex-col flex-1 pt-0 pb-5 px-6 space-y-5">
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center gap-2 text-muted-foreground/80">
-              <span className="font-medium">Used:</span>
-              <span className="font-semibold text-foreground">{prompt.usageCount} times</span>
+          
+          <div className="space-y-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <span>Used:</span>
+              <span className="font-medium text-foreground">{prompt.usageCount}x</span>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground/80">
-              <span className="font-medium">Last Used:</span>
-              <span className="text-foreground/90">{prompt.usageCount > 0 ? formatDistanceToNow(prompt.modifiedAt, { addSuffix: true }) : 'Never'}</span>
-            </div>
-            <div className="flex items-center gap-2 text-muted-foreground/80">
-              <span className="font-medium">Created:</span>
-              <span className="text-foreground/90">{format(prompt.createdAt, 'M/d/yyyy')}</span>
+            <div className="flex items-center justify-between">
+              <span>Created:</span>
+              <span>{format(prompt.createdAt, 'MMM d, yyyy')}</span>
             </div>
           </div>
           
           <div className="flex-1"></div>
           
-          <div className="flex items-center justify-between pt-4 border-t border-border/60">
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center justify-between pt-3 border-t border-border">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCopy(prompt.content)
                 }}
-                title="Copy content"
               >
-                <Copy size={18} weight="duotone" />
+                <Copy size={16} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted/70"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground"
                 onClick={(e) => {
                   e.stopPropagation()
                   setShowDetails(true)
                 }}
-                title="View details"
               >
-                <Eye size={18} weight="duotone" />
+                <Eye size={16} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-accent hover:bg-accent/10"
+                className="h-8 w-8 text-muted-foreground hover:text-accent"
                 onClick={(e) => {
                   e.stopPropagation()
                   setShowDetails(true)
                 }}
-                title="Version history"
               >
-                <ClockCounterClockwise size={18} weight="duotone" />
+                <ClockCounterClockwise size={16} />
               </Button>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                className="h-8 w-8 text-muted-foreground hover:text-primary"
                 onClick={(e) => {
                   e.stopPropagation()
                   onEdit(prompt)
                 }}
-                title="Edit prompt"
               >
-                <Pencil size={18} weight="duotone" />
+                <Pencil size={16} />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
                     onClick={(e) => e.stopPropagation()}
-                    title="Delete prompt"
                   >
-                    <Trash size={18} weight="duotone" />
+                    <Trash size={16} />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-card border-border">
@@ -239,86 +231,82 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
       </Card>
 
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
-        <DialogContent className="max-w-5xl max-h-[90vh] bg-card/95 backdrop-blur-xl border-border/40">
+        <DialogContent className="max-w-4xl max-h-[85vh] bg-card border-border">
           <DialogHeader>
-            <div className="flex items-center gap-3">
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">
+            <div className="flex items-center gap-2 mb-1">
+              <DialogTitle className="text-xl font-bold">
                 {prompt.title}
               </DialogTitle>
-              <Badge variant="outline" className="border-primary/30 text-primary bg-primary/10">v{currentVersion}</Badge>
+              <Badge variant="outline" className="border-primary/30 text-primary bg-primary/10 text-xs">
+                v{currentVersion}
+              </Badge>
             </div>
-            <DialogDescription className="text-base text-muted-foreground/80">
-              {prompt.description || 'No description'}
-            </DialogDescription>
+            {prompt.description && (
+              <DialogDescription className="text-sm text-muted-foreground">
+                {prompt.description}
+              </DialogDescription>
+            )}
           </DialogHeader>
           
           <Tabs defaultValue="current" className="flex-1">
-            <TabsList className="grid w-full grid-cols-2 bg-muted/30">
-              <TabsTrigger value="current" className="data-[state=active]:bg-card data-[state=active]:shadow-md">Current Version</TabsTrigger>
-              <TabsTrigger value="history" className="data-[state=active]:bg-card data-[state=active]:shadow-md">
-                Version History ({versions.length})
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="current">Current</TabsTrigger>
+              <TabsTrigger value="history">
+                History ({versions.length})
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="current" className="space-y-4 mt-6">
-              <ScrollArea className="h-[450px] w-full rounded-xl border border-border/40 bg-muted/20 p-6">
-                <div className="space-y-6">
-                  <div>
-                    <div className="text-xs text-muted-foreground/70 mb-3 uppercase tracking-wide font-semibold">Content</div>
-                    <p className="text-sm font-mono leading-relaxed whitespace-pre-wrap text-foreground/90 bg-card/50 rounded-lg p-4 border border-border/30">
-                      {prompt.content}
-                    </p>
+            <TabsContent value="current" className="space-y-4 mt-4">
+              <ScrollArea className="h-[400px] w-full rounded-lg border border-border bg-muted/30 p-4">
+                <div className="space-y-4">
+                  <div className="text-sm font-mono leading-relaxed whitespace-pre-wrap">
+                    {prompt.content}
                   </div>
-                  <div className="flex items-center gap-6 pt-4 border-t border-border/30 text-xs text-muted-foreground/70">
-                    <div>
-                      <span className="font-semibold">Modified:</span> {format(prompt.modifiedAt, 'PPpp')}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Created:</span> {format(prompt.createdAt, 'PPpp')}
-                    </div>
+                  <div className="flex items-center gap-4 pt-3 border-t border-border/50 text-xs text-muted-foreground">
+                    <div>Modified: {format(prompt.modifiedAt, 'PPp')}</div>
+                    <div>Created: {format(prompt.createdAt, 'PPp')}</div>
                   </div>
                 </div>
               </ScrollArea>
               <div className="flex justify-end">
                 <Button 
                   onClick={() => handleCopy(prompt.content)}
-                  className="bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg shadow-primary/20"
+                  className="bg-primary hover:bg-primary/90"
                 >
-                  <Copy size={16} weight="duotone" />
-                  Copy Current Version
+                  <Copy size={16} />
+                  <span className="ml-2">Copy</span>
                 </Button>
               </div>
             </TabsContent>
             
-            <TabsContent value="history" className="space-y-4 mt-6">
-              <ScrollArea className="h-[450px] w-full">
+            <TabsContent value="history" className="space-y-4 mt-4">
+              <ScrollArea className="h-[400px] w-full">
                 {sortedVersions.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-center p-12">
-                    <div className="relative w-20 h-20 mb-6">
-                      <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-full"></div>
-                      <Clock size={80} weight="duotone" className="text-muted-foreground/30 relative" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-3 bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent">
+                    <Clock size={48} weight="duotone" className="text-muted-foreground/30 mb-4" />
+                    <h3 className="text-base font-semibold mb-2">
                       No Previous Versions
                     </h3>
-                    <p className="text-sm text-muted-foreground/80 max-w-sm leading-relaxed">
+                    <p className="text-sm text-muted-foreground">
                       Previous versions will appear here when you edit this prompt
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-4 pr-4">
+                  <div className="space-y-3 pr-3">
                     {sortedVersions.map((version) => (
-                      <Card key={version.id} className="bg-card/50 border-border/40 hover:border-primary/30 transition-all">
-                        <CardHeader className="pb-3">
+                      <Card key={version.id} className="bg-muted/30 border-border">
+                        <CardHeader className="pb-2">
                           <div className="flex items-center justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
-                                <CardTitle className="text-base font-bold">Version {version.versionNumber}</CardTitle>
-                                <Badge variant="secondary" className="text-xs bg-muted/50">
-                                  {format(version.timestamp, 'PP')}
+                              <div className="flex items-center gap-2 mb-1">
+                                <CardTitle className="text-sm font-semibold">
+                                  Version {version.versionNumber}
+                                </CardTitle>
+                                <Badge variant="secondary" className="text-xs">
+                                  {format(version.timestamp, 'MMM d, yyyy')}
                                 </Badge>
                               </div>
-                              <CardDescription className="text-sm">
+                              <CardDescription className="text-xs">
                                 {version.title}
                               </CardDescription>
                             </div>
@@ -326,24 +314,20 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
                               variant="outline"
                               size="sm"
                               onClick={() => handleCopy(version.content)}
-                              className="hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all"
+                              className="hover:bg-primary/10 hover:border-primary/30"
                             >
-                              <Copy size={14} weight="duotone" />
-                              Copy
+                              <Copy size={14} />
                             </Button>
                           </div>
                         </CardHeader>
-                        <CardContent className="space-y-3">
+                        <CardContent className="space-y-2">
                           {version.description && (
-                            <div className="text-sm text-muted-foreground/80 bg-muted/20 rounded-lg p-3 border border-border/30">
+                            <div className="text-xs text-muted-foreground bg-background/50 rounded p-2">
                               {version.description}
                             </div>
                           )}
-                          <div className="text-sm font-mono text-muted-foreground/90 whitespace-pre-wrap bg-muted/30 rounded-lg p-4 max-h-40 overflow-y-auto border border-border/30">
+                          <div className="text-xs font-mono text-muted-foreground whitespace-pre-wrap bg-background/50 rounded p-3 max-h-32 overflow-y-auto">
                             {version.content}
-                          </div>
-                          <div className="text-xs text-muted-foreground/60">
-                            {format(version.timestamp, 'PPpp')}
                           </div>
                         </CardContent>
                       </Card>
