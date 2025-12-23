@@ -134,7 +134,9 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           )}
           
-          <div className="space-y-1 text-[10px] text-muted-foreground">
+          <div className="flex-1"></div>
+          
+          <div className="space-y-1 text-[10px] text-muted-foreground pb-2.5">
             <div className="flex items-center justify-between">
               <span>Used:</span>
               <span className="font-semibold text-foreground">{prompt.usageCount}x</span>
@@ -144,8 +146,6 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
               <span>{format(prompt.createdAt, 'MMM d, yyyy')}</span>
             </div>
           </div>
-          
-          <div className="flex-1"></div>
           
           <div className="flex items-center justify-between pt-2.5 border-t border-border/60">
             <div className="flex items-center gap-1">
