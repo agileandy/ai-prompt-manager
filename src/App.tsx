@@ -3,7 +3,7 @@ import { useKV } from '@github/spark/hooks'
 import { Prompt, Tag, Version, AIConfig, DEFAULT_AI_CONFIG } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { MagnifyingGlass, Plus, Gear, Tag as TagIcon, Sparkle, ArrowsLeftRight } from '@phosphor-icons/react'
+import { MagnifyingGlass, Plus, Gear, Tag as TagIcon, Sparkle, ArrowsLeftRight, SortAscending, SortDescending } from '@phosphor-icons/react'
 import { Toaster, toast } from 'sonner'
 import { PromptCard } from '@/components/PromptCard'
 import { TagTree } from '@/components/TagTree'
@@ -13,6 +13,12 @@ import { SettingsDialog } from '@/components/SettingsDialog'
 import { TagManager } from '@/components/TagManager'
 import { ImportExport } from '@/components/ImportExport'
 import { buildTagTree } from '@/lib/tag-utils'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 function App() {
   const [prompts, setPrompts] = useKV<Prompt[]>('prompts', [])
@@ -28,12 +34,14 @@ function App() {
   const [showSettings, setShowSettings] = useState(false)
   const [showTagManager, setShowTagManager] = useState(false)
   const [showImportExport, setShowImportExport] = useState(false)
+  const [sortBy, setSortBy] = useKV<'alphabetic' | 'created' | 'modified' | 'usage'>('sort-by', 'modified')
+  const [sortOrder, setSortOrder] = useKV<'asc' | 'desc'>('sort-order', 'desc')
 
   const tagTree = useMemo(() => buildTagTree(tags || [], prompts || []), [tags, prompts])
 
   const filteredPrompts = useMemo(() => {
     if (!prompts) return []
-    return prompts.filter(prompt => {
+    let filtered = prompts.filter(prompt => {
       const matchesSearch = searchQuery === '' ||
         prompt.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         prompt.content.toLowerCase().includes(searchQuery.toLowerCase())
@@ -43,7 +51,30 @@ function App() {
 
       return matchesSearch && matchesTags
     })
-  }, [prompts, searchQuery, selectedTags])
+
+    const sorted = [...filtered].sort((a, b) => {
+      let comparison = 0
+      
+      switch (sortBy) {
+        case 'alphabetic':
+          comparison = a.title.localeCompare(b.title)
+          break
+        case 'created':
+          comparison = a.createdAt - b.createdAt
+          break
+        case 'modified':
+          comparison = a.modifiedAt - b.modifiedAt
+          break
+        case 'usage':
+          comparison = a.usageCount - b.usageCount
+          break
+      }
+
+      return sortOrder === 'asc' ? comparison : -comparison
+    })
+
+    return sorted
+  }, [prompts, searchQuery, selectedTags, sortBy, sortOrder])
 
   const handleCreatePrompt = () => {
     setEditingPrompt(null)
@@ -163,6 +194,19 @@ function App() {
     }
   }
 
+  const toggleSortOrder = () => {
+    setSortOrder(current => current === 'asc' ? 'desc' : 'asc')
+  }
+
+  const getSortLabel = () => {
+    switch (sortBy) {
+      case 'alphabetic': return 'Alphabetic'
+      case 'created': return 'Created Date'
+      case 'modified': return 'Modified Date'
+      case 'usage': return 'Usage Count'
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border bg-card/70 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
@@ -246,6 +290,50 @@ function App() {
                   className="pl-12 h-11 bg-card/60 border-border text-base"
                 />
               </div>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="outline"
+                    className="h-11 px-5"
+                  >
+                    {sortOrder === 'asc' ? (
+                      <SortAscending size={18} />
+                    ) : (
+                      <SortDescending size={18} />
+                    )}
+                    <span className="ml-2">{getSortLabel()}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => setSortBy('alphabetic')}>
+                    Alphabetic
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy('created')}>
+                    Created Date
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy('modified')}>
+                    Modified Date
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy('usage')}>
+                    Usage Count
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSortOrder}
+                className="h-11 w-11"
+              >
+                {sortOrder === 'asc' ? (
+                  <SortAscending size={20} />
+                ) : (
+                  <SortDescending size={20} />
+                )}
+              </Button>
+
               <Button 
                 onClick={() => setShowAIGenerator(true)} 
                 variant="outline"
