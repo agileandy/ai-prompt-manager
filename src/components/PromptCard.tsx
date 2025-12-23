@@ -89,40 +89,40 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
       >
         {isDragOver && (
           <div className="absolute inset-0 bg-accent/10 z-10 flex items-center justify-center rounded-xl border-2 border-accent border-dashed pointer-events-none">
-            <div className="bg-accent text-accent-foreground px-4 py-2 rounded-lg font-semibold text-sm shadow-lg">
+            <div className="bg-accent text-accent-foreground px-3 py-1.5 rounded-lg font-semibold text-xs shadow-lg">
               Drop to add tag
             </div>
           </div>
         )}
         
-        <CardHeader className="pb-4 space-y-3">
-          <div className="flex items-start justify-between gap-4">
-            <CardTitle className="text-lg font-bold flex-1 line-clamp-2 leading-tight">
+        <CardHeader className="pb-2 space-y-1.5 p-4">
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle className="text-base font-bold flex-1 line-clamp-2 leading-snug">
               {prompt.title}
             </CardTitle>
             <Badge 
               variant="secondary" 
-              className="text-xs shrink-0 bg-primary/15 text-primary border-0 font-bold px-2.5 py-1"
+              className="text-[10px] shrink-0 bg-primary/15 text-primary border-0 font-bold px-1.5 py-0.5 h-5"
             >
               v{currentVersion}
             </Badge>
           </div>
           
           {prompt.description && (
-            <CardDescription className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            <CardDescription className="text-xs text-muted-foreground line-clamp-2 leading-snug">
               {prompt.description}
             </CardDescription>
           )}
         </CardHeader>
         
-        <CardContent className="flex flex-col flex-1 pt-0 space-y-5">
+        <CardContent className="flex flex-col flex-1 pt-0 px-4 pb-3 space-y-2.5">
           {prompt.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5">
               {prompt.tags.map(tag => (
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className="text-xs px-2.5 py-1 font-medium border-0"
+                  className="text-[10px] px-1.5 py-0.5 font-medium border-0 h-5"
                   style={{
                     backgroundColor: getTagColor(tag) + '25',
                     color: getTagColor(tag)
@@ -134,7 +134,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           )}
           
-          <div className="space-y-2 text-xs text-muted-foreground">
+          <div className="space-y-1 text-[10px] text-muted-foreground">
             <div className="flex items-center justify-between">
               <span>Used:</span>
               <span className="font-semibold text-foreground">{prompt.usageCount}x</span>
@@ -145,66 +145,66 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           </div>
           
-          <div className="flex-1 min-h-[1rem]"></div>
+          <div className="flex-1"></div>
           
-          <div className="flex items-center justify-between pt-4 border-t border-border/60">
-            <div className="flex items-center gap-1.5">
+          <div className="flex items-center justify-between pt-2.5 border-t border-border/60">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-primary/10"
+                className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-primary/10"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCopy(prompt.content)
                 }}
               >
-                <Copy size={17} />
+                <Copy size={15} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-primary/10"
+                className="h-7 w-7 text-muted-foreground hover:text-foreground hover:bg-primary/10"
                 onClick={(e) => {
                   e.stopPropagation()
                   setShowDetails(true)
                 }}
               >
-                <Eye size={17} />
+                <Eye size={15} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-accent hover:bg-accent/10"
+                className="h-7 w-7 text-muted-foreground hover:text-accent hover:bg-accent/10"
                 onClick={(e) => {
                   e.stopPropagation()
                   setShowDetails(true)
                 }}
               >
-                <ClockCounterClockwise size={17} />
+                <ClockCounterClockwise size={15} />
               </Button>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-9 w-9 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                className="h-7 w-7 text-muted-foreground hover:text-primary hover:bg-primary/10"
                 onClick={(e) => {
                   e.stopPropagation()
                   onEdit(prompt)
                 }}
               >
-                <Pencil size={17} />
+                <Pencil size={15} />
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-9 w-9 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    className="h-7 w-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <Trash size={17} />
+                    <Trash size={15} />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="bg-card border-border">
