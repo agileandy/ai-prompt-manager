@@ -95,7 +95,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
           </div>
         )}
         
-        <CardHeader className="pb-2 space-y-1.5 p-4">
+        <CardHeader className="pb-1 space-y-1 p-3">
           <div className="flex items-start justify-between gap-2">
             <CardTitle className="text-base font-bold flex-1 line-clamp-2 leading-snug">
               {prompt.title}
@@ -115,7 +115,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
           )}
         </CardHeader>
         
-        <CardContent className="flex flex-col flex-1 pt-0 px-4 pb-3 space-y-2.5">
+        <CardContent className="flex flex-col flex-1 pt-0 px-3 pb-2 space-y-1.5">
           {prompt.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {prompt.tags.map(tag => (
@@ -136,7 +136,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
           
           <div className="flex-1"></div>
           
-          <div className="space-y-1 text-[10px] text-muted-foreground pb-2.5">
+          <div className="space-y-0.5 text-[10px] text-muted-foreground pb-1.5">
             <div className="flex items-center justify-between">
               <span>Used:</span>
               <span className="font-semibold text-foreground">{prompt.usageCount}x</span>
@@ -147,7 +147,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           </div>
           
-          <div className="flex items-center justify-between pt-2.5 border-t border-border/60">
+          <div className="flex items-center justify-between pt-1.5 border-t border-border/60">
             <div className="flex items-center gap-1">
               <Button
                 variant="ghost"
