@@ -80,7 +80,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
     <>
       <Card 
         className={cn(
-          "relative bg-card border border-border hover:border-primary/50 transition-all duration-200 flex flex-col h-full shadow-sm hover:shadow-md",
+          "relative bg-card border border-border hover:border-primary/50 transition-all duration-200 flex flex-col shadow-sm hover:shadow-md",
           isDragOver && "border-accent ring-2 ring-accent/40 bg-accent/5"
         )}
         onDragOver={handleDragOver}
@@ -134,9 +134,7 @@ export function PromptCard({ prompt, tags, versions, onEdit, onDelete, onUseProm
             </div>
           )}
           
-          <div className="flex-1"></div>
-          
-          <div className="space-y-0.5 text-[10px] text-muted-foreground pb-1.5">
+          <div className="space-y-0.5 text-[10px] text-muted-foreground pb-1.5 mt-auto">
             <div className="flex items-center justify-between">
               <span>Used:</span>
               <span className="font-semibold text-foreground">{prompt.usageCount}x</span>
